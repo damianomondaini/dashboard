@@ -1,5 +1,6 @@
 // Require modules
 let bcrypt = require('bcrypt');
+let jwt = require('jsonwebtoken');
 let UserModel = require('../models/users/user.model');
 
 // Utils funcions
@@ -19,8 +20,21 @@ async function comparePasswordToHash(password, hash) {
     return isPasswordCorrect;
 }
 
+async function generateTokenForUser(userId, isAdmin) {
+    let token = await jwt.sign({
+        userId: userId,
+        isAdmin: isAdmin
+    },
+    process.env.JWT_SECRET,
+    {
+        expiresIn: '1h'
+    });
+    return token;
+}
+
 module.exports = {
     checkIfUserExists: checkIfUserExists,
     hashPassword: hashPassword,
-    comparePasswordToHash: comparePasswordToHash
+    comparePasswordToHash: comparePasswordToHash,
+    generateTokenForUser: generateTokenForUser
 }

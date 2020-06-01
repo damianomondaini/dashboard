@@ -1,5 +1,5 @@
 // Require modules
-let {checkIfUserExists, hashPassword, comparePasswordToHash} = require('../../utils/users.utils');
+let {checkIfUserExists, hashPassword, comparePasswordToHash, generateTokenForUser} = require('../../utils/users.utils');
 let {check, validationResult} = require('express-validator');
 let UserModel = require('../../models/users/user.model');
 
@@ -47,7 +47,7 @@ exports.userSignIn = async (req, res) => {
             if (isPasswordCorrect) {
                 res.json({
                     'message': 'Email and password are correct',
-                    'token': 'Add token here',
+                    'token': await generateTokenForUser(user._id, user.isAdmin),
                     'status': true
                 });
             } else {
