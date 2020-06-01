@@ -24,7 +24,7 @@ mongoose.connection.on('error', () => {
 // Routes
 let userRoute = require('./routes/users/user.route');
 
-app.use('/users', userRoute);
+app.use('/api/users', userRoute);
 
 // Listen
 app.listen(process.env.PORT);
