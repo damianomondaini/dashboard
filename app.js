@@ -21,8 +21,10 @@ mongoose.connection.on('error', () => {
 
 // Routes
 let userRoute = require('./routes/user.route');
+let weightTrackerRoute = require('./routes/weightTracker.route');
 
 app.use('/api/users', userRoute);
+app.use('/api/weight-tracker', weightTrackerRoute);
 
 // Listen
 app.listen(process.env.PORT);

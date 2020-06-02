@@ -12,8 +12,8 @@ exports.userSignUp = async (req, res) => {
         let user = await checkIfUserExists(req.body.email);
         if (user) {
             res.status(400).json({
-                'message': 'Email already used',
-                'status': false
+                message: 'Email already used',
+                status: false
             });
         } else {
             let hash = await hashPassword(req.body.password);
@@ -24,8 +24,8 @@ exports.userSignUp = async (req, res) => {
             });
             await user.save();
             res.json({
-                'message': 'User added successfully',
-                'status': true
+                message: 'User added successfully',
+                status: true
             });
         }
     }
@@ -39,21 +39,21 @@ exports.userSignIn = async (req, res) => {
         let user = await checkIfUserExists(req.body.email);
         if (!user) {
             res.status(400).json({
-                'message': 'Email or password is wrong',
-                'status': false
+                message: 'Email or password is wrong',
+                status: false
             });
         } else {            
             let isPasswordCorrect = await comparePasswordToHash(req.body.password, user.password);
             if (isPasswordCorrect) {
                 res.json({
-                    'message': 'Email and password are correct',
-                    'token': await generateTokenForUser(user._id, user.isAdmin),
-                    'status': true
+                    message: 'Email and password are correct',
+                    token: await generateTokenForUser(user._id, user.isAdmin),
+                    status: true
                 });
             } else {
                 res.status(400).json({
-                    'message': 'Email or password is wrong',
-                    'status': false
+                    message: 'Email or password is wrong',
+                    status: false
                 });
             }
         }
