@@ -20,10 +20,9 @@ async function comparePasswordToHash(password, hash) {
     return isPasswordCorrect;
 }
 
-async function generateTokenForUser(userId, isAdmin) {
+async function generateTokenForUser(userId) {
     let token = await jwt.sign({
-        userId: userId,
-        isAdmin: isAdmin
+        userId: userId
     },
     process.env.JWT_SECRET,
     {

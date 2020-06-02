@@ -1,5 +1,6 @@
 // Require modules
-let {checkIfUserExists, hashPassword, comparePasswordToHash, generateTokenForUser} = require('../utils/users.utils');
+let {checkIfUserExists, hashPassword, comparePasswordToHash, generateTokenForUser, verifyToken} = require('../utils/users.utils');
+let {validateData} = require('../utils/validation.utils');
 let {validationResult} = require('express-validator');
 let UserModel = require('../models/users/user.model');
 
@@ -47,7 +48,7 @@ exports.userSignIn = async (req, res) => {
             if (isPasswordCorrect) {
                 res.json({
                     message: 'Email and password are correct',
-                    token: await generateTokenForUser(user._id, user.isAdmin),
+                    token: await generateTokenForUser(user._id),
                     status: true
                 });
             } else {
@@ -57,5 +58,52 @@ exports.userSignIn = async (req, res) => {
                 });
             }
         }
+    }
+}
+
+exports.userGrantAdminById = async (req, res) => {
+    let isDataValid = await validateData(req, res);
+    let token = await verifyToken(req, res);
+    if (isDataValid && token) {
+        if (token.isAdmin) {
+            let user = await UserModel.findById(req.params.id);
+            if (user != null && user.isAdmin === false) {
+                let updatedUser = await UserModel.findByIdAndUpdate(req.params.id,
+                    {
+                        $set: {
+                            isAdmin: true
+                        }
+                    },
+                    { new: true }
+                );
+                res.json(updatedUser);
+                res.end();
+            } else {
+                res.status(400).json({
+                    message: 'Unable to grant admin',
+                    status: false
+                });
+                res.end();
+            }
+        } else {
+            res.status(400).json({
+                message: 'You are unauthorized to grant a user as admin',
+                status: false
+            });
+            res.end();
+        }
+    }
+}
+
+exports.refreshToken = async (req, res) => {
+    let token = await verifyToken(req, res);
+    if (token) {
+        let newToken = await generateTokenForUser(token.userId);
+        res.json({
+            message: 'Token refreshed',
+            token: newToken,
+            status: true
+        });
+        res.end();
     }
 }

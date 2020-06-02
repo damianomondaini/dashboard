@@ -14,4 +14,12 @@ router.post('/signin', [check('email').isEmail(), check('password')], (req, res)
     userController.userSignIn(req, res);
 });
 
+router.put('/admin/:id', [check('id').isMongoId()], (req, res) => {
+    userController.userGrantAdminById(req, res);
+});
+
+router.get('/refresh', (req, res) => {
+    userController.refreshToken(req, res);
+});
+
 module.exports = router;
