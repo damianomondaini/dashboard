@@ -4,8 +4,6 @@ let bodyParser = require('body-parser');
 let mongoose = require('mongoose');
 require('dotenv').config();
 
-let UserModel = require('./models/users/user.model');
-
 // App setup
 let app = express();
 app.use(bodyParser.json());
@@ -22,7 +20,7 @@ mongoose.connection.on('error', () => {
 });
 
 // Routes
-let userRoute = require('./routes/users/user.route');
+let userRoute = require('./routes/user.route');
 
 app.use('/api/users', userRoute);
 

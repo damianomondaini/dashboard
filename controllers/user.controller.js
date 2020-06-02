@@ -1,7 +1,7 @@
 // Require modules
-let {checkIfUserExists, hashPassword, comparePasswordToHash, generateTokenForUser} = require('../../utils/users.utils');
+let {checkIfUserExists, hashPassword, comparePasswordToHash, generateTokenForUser} = require('../utils/users.utils');
 let {check, validationResult} = require('express-validator');
-let UserModel = require('../../models/users/user.model');
+let UserModel = require('../models/users/user.model');
 
 // Controllers
 exports.userSignUp = async (req, res) => {

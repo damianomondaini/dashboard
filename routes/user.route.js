@@ -3,7 +3,7 @@ let express = require('express');
 let router = express.Router();
 let {check} = require('express-validator');
 
-let userController = require('../../controllers/users/user.controller');
+let userController = require('../controllers/user.controller');
 
 // Define routes like /api/users/...
 router.post('/signup', [check('email').isEmail(), check('password').isLength({min: 10})], (req, res) => {
